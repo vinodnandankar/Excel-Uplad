@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -28,51 +30,21 @@ public class UploadSheetService {
 				DataSheet dataSheet=new DataSheet();
 			Row row=rows.next();
 			
-			dataSheet.setSrNo((int)row.getCell(0).getNumericCellValue());
-			dataSheet.setApiVersion(row.getCell(1).getStringCellValue());
-			dataSheet.setApiName(row.getCell(2).getStringCellValue());
-			dataSheet.setApiType(row.getCell(3).getStringCellValue());
-			dataSheet.setApiRiskClassificatin(row.getCell(4).getStringCellValue());
-			dataSheet.setRamlReviewStatus(row.getCell(5).getStringCellValue());
-			Cell cellRamlReviewDate = row.getCell(6);
-			System.out.println("cellRamlReviewDate================="+cellRamlReviewDate);
-			if (cellRamlReviewDate == null) {
-				dataSheet.setRamlReviewDate(null);
-			    } else {
-			    	dataSheet.setRamlReviewDate(row.getCell(6).getDateCellValue());
-			    }
-			dataSheet.setVeracodeStatus(row.getCell(7).getStringCellValue());
-			Cell cellVeracodeDate = row.getCell(8);
-			System.out.println("cellVeracodeDate================="+cellVeracodeDate);
-			if (cellVeracodeDate == null) {
-				dataSheet.setVeracodeDate(null);
-			    } else {
-					dataSheet.setVeracodeDate(row.getCell(8).getDateCellValue());
-			    }
-			dataSheet.setPenTestStatus(row.getCell(9).getStringCellValue());
-			Cell cellPenTestDate = row.getCell(10);
-			System.out.println("cellPenTestDate================="+cellPenTestDate);
-			if (cellPenTestDate == null) {
-				dataSheet.setPenTestDate(null);
-			    } else {
-					dataSheet.setPenTestDate(row.getCell(10).getDateCellValue());
-			    }
-			Cell cellVeracodeSlaBreach = row.getCell(11);
-			System.out.println("cellVeracodeSlaBreach================="+cellVeracodeSlaBreach);
-			if (cellVeracodeSlaBreach == null) {
-				dataSheet.setVeracodeSlaBreach(null);
-			    } else {
-					dataSheet.setVeracodeSlaBreach(row.getCell(11).getStringCellValue());
-			    }
-			Cell cellPenTestSlaBreach = row.getCell(12);
-			System.out.println("cellPenTestSlaBreach================="+cellPenTestSlaBreach);
-			if (cellPenTestSlaBreach == null) {
-				dataSheet.setPenTestSlaBreach(null);
-			    } else {
-					dataSheet.setPenTestSlaBreach(row.getCell(12).getStringCellValue());
-			    }
-			dataSheet.setRamlReviewPending(row.getCell(13).getStringCellValue());
-			dataSheet.setRiskScore((int)row.getCell(14).getNumericCellValue());
+			dataSheet.setSrNo(getIntegerValue(row.getCell(0)));
+			dataSheet.setApiVersion(getStringValue(row.getCell(1)));
+			dataSheet.setApiName(getStringValue(row.getCell(2)));
+			dataSheet.setApiType(getStringValue(row.getCell(3)));
+			dataSheet.setApiRiskClassificatin(getStringValue(row.getCell(4)));
+			dataSheet.setRamlReviewStatus(getStringValue(row.getCell(5)));
+			dataSheet.setRamlReviewDate(getDateValue(row.getCell(6)));
+			dataSheet.setVeracodeStatus(getStringValue(row.getCell(7)));
+			dataSheet.setVeracodeDate(getDateValue(row.getCell(8)));
+			dataSheet.setPenTestStatus(getStringValue(row.getCell(9)));
+			dataSheet.setPenTestDate(getDateValue(row.getCell(10)));
+			dataSheet.setVeracodeSlaBreach(getStringValue(row.getCell(11)));
+			dataSheet.setPenTestSlaBreach(getStringValue(row.getCell(12)));
+			dataSheet.setRamlReviewPending(getStringValue(row.getCell(13)));
+			dataSheet.setRiskScore(getIntegerValue(row.getCell(14)));
 
 			dataSheetList.add(dataSheet);
 			}
@@ -92,6 +64,22 @@ public class UploadSheetService {
 				e.printStackTrace();
 			}
 			return workBook;
+		}
+		
+		private String getStringValue(Cell cell) {
+			return (cell != null && cell.getCellType() == CellType.STRING) ?  cell.getStringCellValue() : "";
+		}
+
+		private Date getDateValue(Cell cell) {
+			return cell != null ?  cell.getDateCellValue() : null;
+		}
+
+		private Integer getIntegerValue(Cell cell) {
+			return (cell != null && cell.getCellType() == CellType.NUMERIC) ?  (int)cell.getNumericCellValue() : null;
+		}
+
+		private Boolean getBooleanValue(Cell cell) {
+			return (cell != null && cell.getCellType() == CellType.BOOLEAN) ?  cell.getBooleanCellValue() : Boolean.FALSE;
 		}
 }
 /*Cell cell = row.getCell(6);

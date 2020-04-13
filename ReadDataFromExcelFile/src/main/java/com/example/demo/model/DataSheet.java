@@ -1,19 +1,33 @@
 package com.example.demo.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class DataSheet {
+import com.example.demo.util.JsonDateSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.OptBoolean;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
+public class DataSheet implements Serializable{
+
+	private static final long serialVersionUID = -1275414045316392907L;
+	
 	private int srNo;
 	private String apiVersion;
 	private String apiName;
 	private String apiType;
 	private String apiRiskClassificatin;
 	private String ramlReviewStatus;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonFormat(pattern = "yyyy-MM-dd", lenient = OptBoolean.FALSE)
 	private Date ramlReviewDate;
 	private String veracodeStatus;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonFormat(pattern = "yyyy-MM-dd", lenient = OptBoolean.FALSE)
 	private Date veracodeDate;
 	private String penTestStatus;
+	@JsonSerialize(using = JsonDateSerializer.class)
+	@JsonFormat(pattern = "yyyy-MM-dd", lenient = OptBoolean.FALSE)
 	private Date penTestDate;
 	private String veracodeSlaBreach;
 	private String penTestSlaBreach;
