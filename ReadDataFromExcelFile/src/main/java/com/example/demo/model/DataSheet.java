@@ -35,7 +35,6 @@ public class DataSheet implements Serializable{
 	private int riskScore;
 
 	public DataSheet() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public DataSheet(int srNo, String apiVersion, String apiName, String apiType, String apiRiskClassificatin,

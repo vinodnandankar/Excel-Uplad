@@ -44,7 +44,8 @@ public class UploadSheetService {
 			dataSheet.setVeracodeSlaBreach(getStringValue(row.getCell(11)));
 			dataSheet.setPenTestSlaBreach(getStringValue(row.getCell(12)));
 			dataSheet.setRamlReviewPending(getStringValue(row.getCell(13)));
-			dataSheet.setRiskScore(getIntegerValue(row.getCell(14)));
+			//dataSheet.setRiskScore(getIntegerValue(row.getCell(14)));
+			dataSheet.setRiskScore(getRiskScore(dataSheet));
 
 			dataSheetList.add(dataSheet);
 			}
@@ -81,6 +82,13 @@ public class UploadSheetService {
 		private Boolean getBooleanValue(Cell cell) {
 			return (cell != null && cell.getCellType() == CellType.BOOLEAN) ?  cell.getBooleanCellValue() : Boolean.FALSE;
 		}
+		
+		private int getRiskScore(DataSheet dataSheet) {
+			int riskRiskScore = 0;
+			
+			return riskRiskScore;
+		}
+		
 }
 /*Cell cell = row.getCell(6);
 System.out.println("Cell================="+cell);
