@@ -1,10 +1,12 @@
 package com.example.demo.service;
 
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -19,7 +21,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.DataSheet;
 import com.example.demo.util.ConstantsVars;
-import com.example.demo.util.ConstantsVars.*;
 
 @Service
 public class UploadSheetService {
@@ -51,6 +52,7 @@ public class UploadSheetService {
 			dataSheet.setRamlReviewPending(getStringValue(row.getCell(13)));
 			// dataSheet.setRiskScore(getIntegerValue(row.getCell(14)));
 			dataSheet.setRiskScore(getRiskScore(dataSheet));
+			dataSheet.setOverallRiskClassification(getOverallRiskClassification(dataSheet.getRiskScore()));
 
 			dataSheetList.add(dataSheet);
 		}
@@ -90,13 +92,35 @@ public class UploadSheetService {
 	}
 
 	private int getRiskScore(DataSheet dataSheet) {
+
+		Predicate<DataSheet> pendingRamlReviewStatusPredicate = api -> "Pending"
+				.equalsIgnoreCase(api.getRamlReviewStatus());
+		Predicate<DataSheet> pendingVeracodeStatusPredicate = api -> "Pending"
+				.equalsIgnoreCase(api.getVeracodeStatus());
+		Predicate<DataSheet> pendingPenTestStatusPredicate = api -> "Pending".equalsIgnoreCase(api.getPenTestStatus());
+		Predicate<DataSheet> veracodeSlaBreachPredicate = api -> "SLA Breached"
+				.equalsIgnoreCase(api.getVeracodeSlaBreach());
+		Predicate<DataSheet> penTestSlaBreachPredicate = api -> "SLA Breached"
+				.equalsIgnoreCase(api.getPenTestSlaBreach());
+
+		Predicate<DataSheet> externalAPITypePredicate = api -> "External".equalsIgnoreCase(api.getApiType());
+		Predicate<DataSheet> internalAPITypePredicate = api -> "Internal".equalsIgnoreCase(api.getApiType());
+
+		Predicate<DataSheet> crticalRiskClassificationPredicate = api -> "Critical"
+				.equalsIgnoreCase(api.getApiRiskClassificatin());
+		Predicate<DataSheet> highRiskClassificationPredicate = api -> "High"
+				.equalsIgnoreCase(api.getApiRiskClassificatin());
+		Predicate<DataSheet> mediumRiskClassificationPredicate = api -> "Medium"
+				.equalsIgnoreCase(api.getApiRiskClassificatin());
+		Predicate<DataSheet> lowRiskClassificationPredicate = api -> "Low"
+				.equalsIgnoreCase(api.getApiRiskClassificatin());
 		int riskScore = 0;
 		int tempRiskScore = 0;
 		if ("Internal".equals(dataSheet.getApiType())) {
 			tempRiskScore = 0;
 			if ("Low".equalsIgnoreCase(dataSheet.getApiRiskClassificatin())) {
-				
-				if (ConstantsVars.PENDING.equalsIgnoreCase(dataSheet.getPenTestStatus())) {
+
+				if (pendingPenTestStatusPredicate.equals(dataSheet.getPenTestStatus())) {
 					tempRiskScore = tempRiskScore + 0;
 				}
 				if (ConstantsVars.PENDING.equalsIgnoreCase(dataSheet.getRamlReviewStatus())) {
@@ -232,6 +256,24 @@ public class UploadSheetService {
 		riskScore = tempRiskScore;
 		return riskScore;
 	}
+
+	private String getOverallRiskClassification(int riskScore) {
+		String overallRisk = null;
+
+		if (IntStream.rangeClosed(0, 0).boxed().collect(Collectors.toList()).contains(riskScore))
+			overallRisk = "No Risk";
+		if (IntStream.rangeClosed(1, 6).boxed().collect(Collectors.toList()).contains(riskScore))
+			overallRisk = "Low Risk";
+		if (IntStream.rangeClosed(7, 13).boxed().collect(Collectors.toList()).contains(riskScore))
+			overallRisk = "Medium Risk";
+		if (IntStream.rangeClosed(14, 24).boxed().collect(Collectors.toList()).contains(riskScore))
+			overallRisk = "High Risk";
+		if (IntStream.rangeClosed(25, 34).boxed().collect(Collectors.toList()).contains(riskScore))
+			overallRisk = "Critical Risk";
+
+		return overallRisk;
+	}
+
 }
 /*
  * Cell cell = row.getCell(6); System.out.println("Cell================="+cell);

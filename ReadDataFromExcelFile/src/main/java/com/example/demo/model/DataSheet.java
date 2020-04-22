@@ -33,6 +33,7 @@ public class DataSheet implements Serializable{
 	private String penTestSlaBreach;
 	private String ramlReviewPending;
 	private int riskScore;
+	private String overallRiskClassification;
 
 	public DataSheet() {
 	}
@@ -40,7 +41,7 @@ public class DataSheet implements Serializable{
 	public DataSheet(int srNo, String apiVersion, String apiName, String apiType, String apiRiskClassificatin,
 			String ramlReviewStatus, Date ramlReviewDate, String veracodeStatus, Date veracodeDate,
 			String penTestStatus, Date penTestDate, String veracodeSlaBreach, String penTestSlaBreach,
-			String ramlReviewPending, int riskScore) {
+			String ramlReviewPending, int riskScore, String overallRiskClassification) {
 		super();
 		this.srNo = srNo;
 		this.apiVersion = apiVersion;
@@ -57,6 +58,7 @@ public class DataSheet implements Serializable{
 		this.penTestSlaBreach = penTestSlaBreach;
 		this.ramlReviewPending = ramlReviewPending;
 		this.riskScore = riskScore;
+		this.overallRiskClassification =  overallRiskClassification;
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class DataSheet implements Serializable{
 				+ ", ramlReviewDate=" + ramlReviewDate + ", veracodeStatus=" + veracodeStatus + ", veracodeDate="
 				+ veracodeDate + ", penTestStatus=" + penTestStatus + ", penTestDate=" + penTestDate
 				+ ", veracodeSlaBreach=" + veracodeSlaBreach + ", penTestSlaBreach=" + penTestSlaBreach
-				+ ", ramlReviewPending=" + ramlReviewPending + ", riskScore=" + riskScore + "]";
+				+ ", ramlReviewPending=" + ramlReviewPending + ", riskScore=" + riskScore + ", overallRiskClassification=" + overallRiskClassification + " ]";
 	}
 
 	public int getSrNo() {
@@ -187,6 +189,14 @@ public class DataSheet implements Serializable{
 
 	public void setRiskScore(int riskScore) {
 		this.riskScore = riskScore;
+	}
+
+	public String getOverallRiskClassification() {
+		return overallRiskClassification;
+	}
+
+	public void setOverallRiskClassification(String overallRiskClassification) {
+		this.overallRiskClassification = overallRiskClassification;
 	}
 
 	
