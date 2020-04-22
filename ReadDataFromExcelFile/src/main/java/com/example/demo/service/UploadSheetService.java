@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -17,19 +18,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.DataSheet;
+import com.example.demo.util.ConstantsVars;
+import com.example.demo.util.ConstantsVars.*;
+
 @Service
 public class UploadSheetService {
-	List<DataSheet> dataSheetList= new ArrayList<DataSheet>();	
-		public List<DataSheet> upload(MultipartFile file)throws Exception{
-			
-			Workbook workbook=getWorkBook(file);
-			Sheet sheet= workbook.getSheetAt(0);
-			Iterator<Row> rows=sheet.iterator();
-			rows.next();
-			while (rows.hasNext()) {
-				DataSheet dataSheet=new DataSheet();
-			Row row=rows.next();
-			
+	List<DataSheet> dataSheetList = new ArrayList<DataSheet>();
+
+	public List<DataSheet> upload(MultipartFile file) throws Exception {
+
+		Workbook workbook = getWorkBook(file);
+		Sheet sheet = workbook.getSheetAt(0);
+		Iterator<Row> rows = sheet.iterator();
+		rows.next();
+		while (rows.hasNext()) {
+			DataSheet dataSheet = new DataSheet();
+			Row row = rows.next();
+
 			dataSheet.setSrNo(getIntegerValue(row.getCell(0)));
 			dataSheet.setApiVersion(getStringValue(row.getCell(1)));
 			dataSheet.setApiName(getStringValue(row.getCell(2)));
@@ -44,59 +49,194 @@ public class UploadSheetService {
 			dataSheet.setVeracodeSlaBreach(getStringValue(row.getCell(11)));
 			dataSheet.setPenTestSlaBreach(getStringValue(row.getCell(12)));
 			dataSheet.setRamlReviewPending(getStringValue(row.getCell(13)));
-			//dataSheet.setRiskScore(getIntegerValue(row.getCell(14)));
+			// dataSheet.setRiskScore(getIntegerValue(row.getCell(14)));
 			dataSheet.setRiskScore(getRiskScore(dataSheet));
 
 			dataSheetList.add(dataSheet);
+		}
+		return dataSheetList;
+
+	}
+
+	private Workbook getWorkBook(MultipartFile file) {
+		Workbook workBook = null;
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		try {
+			if (extension.equalsIgnoreCase("xlsx")) {
+				workBook = new XSSFWorkbook(file.getInputStream());
+			} else if (extension.equalsIgnoreCase("xls")) {
+				workBook = new HSSFWorkbook(file.getInputStream());
 			}
-			return dataSheetList;
-			
-}
-		private Workbook getWorkBook(MultipartFile file) {
-			Workbook workBook=null;
-			String extension=FilenameUtils.getExtension(file.getOriginalFilename());
-			try {
-				if(extension.equalsIgnoreCase("xlsx")) {
-					workBook=new XSSFWorkbook(file.getInputStream());
-				}else if(extension.equalsIgnoreCase("xls")) {
-					workBook=new HSSFWorkbook(file.getInputStream());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return workBook;
+	}
+
+	private String getStringValue(Cell cell) {
+		return (cell != null && cell.getCellType() == CellType.STRING) ? cell.getStringCellValue() : "";
+	}
+
+	private Date getDateValue(Cell cell) {
+		return cell != null ? cell.getDateCellValue() : null;
+	}
+
+	private Integer getIntegerValue(Cell cell) {
+		return (cell != null && cell.getCellType() == CellType.NUMERIC) ? (int) cell.getNumericCellValue() : null;
+	}
+
+	private Boolean getBooleanValue(Cell cell) {
+		return (cell != null && cell.getCellType() == CellType.BOOLEAN) ? cell.getBooleanCellValue() : Boolean.FALSE;
+	}
+
+	private int getRiskScore(DataSheet dataSheet) {
+		int riskScore = 0;
+		int tempRiskScore = 0;
+		if ("Internal".equals(dataSheet.getApiType())) {
+			tempRiskScore = 0;
+			if ("Low".equalsIgnoreCase(dataSheet.getApiRiskClassificatin())) {
+				
+				if (ConstantsVars.PENDING.equalsIgnoreCase(dataSheet.getPenTestStatus())) {
+					tempRiskScore = tempRiskScore + 0;
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+				if (ConstantsVars.PENDING.equalsIgnoreCase(dataSheet.getRamlReviewStatus())) {
+					tempRiskScore = tempRiskScore + 0;
+				}
+				if (ConstantsVars.PENDING.equalsIgnoreCase(dataSheet.getVeracodeStatus())) {
+					tempRiskScore = tempRiskScore + 1;
+				}
+				if (ConstantsVars.SLA_BREACH.equalsIgnoreCase(dataSheet.getPenTestSlaBreach())) {
+					tempRiskScore = tempRiskScore + 0;
+				}
+				if (ConstantsVars.SLA_BREACH.equalsIgnoreCase(dataSheet.getVeracodeSlaBreach())) {
+					tempRiskScore = tempRiskScore + 0;
+				}
+			} else if ("Medium".equalsIgnoreCase(dataSheet.getApiRiskClassificatin())) {
+				if ("Pending".equalsIgnoreCase(dataSheet.getPenTestStatus())) {
+					tempRiskScore = tempRiskScore + 0;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getRamlReviewStatus())) {
+					tempRiskScore = tempRiskScore + 0;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getVeracodeStatus())) {
+					tempRiskScore = tempRiskScore + 2;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getPenTestSlaBreach())) {
+					tempRiskScore = tempRiskScore + 0;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getVeracodeSlaBreach())) {
+					tempRiskScore = tempRiskScore + 1;
+				}
+			} else if ("High".equalsIgnoreCase(dataSheet.getApiRiskClassificatin())) {
+				if ("Pending".equalsIgnoreCase(dataSheet.getPenTestStatus())) {
+					tempRiskScore = tempRiskScore + 6;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getRamlReviewStatus())) {
+					tempRiskScore = tempRiskScore + 4;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getVeracodeStatus())) {
+					tempRiskScore = tempRiskScore + 6;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getPenTestSlaBreach())) {
+					tempRiskScore = tempRiskScore + 4;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getVeracodeSlaBreach())) {
+					tempRiskScore = tempRiskScore + 4;
+				}
+			} else if ("Critical".equalsIgnoreCase(dataSheet.getApiRiskClassificatin())) {
+				if ("Pending".equalsIgnoreCase(dataSheet.getPenTestStatus())) {
+					tempRiskScore = tempRiskScore + 10;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getRamlReviewStatus())) {
+					tempRiskScore = tempRiskScore + 8;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getVeracodeStatus())) {
+					tempRiskScore = tempRiskScore + 10;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getPenTestSlaBreach())) {
+					tempRiskScore = tempRiskScore + 8;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getVeracodeSlaBreach())) {
+					tempRiskScore = tempRiskScore + 8;
+				}
 			}
-			return workBook;
-		}
-		
-		private String getStringValue(Cell cell) {
-			return (cell != null && cell.getCellType() == CellType.STRING) ?  cell.getStringCellValue() : "";
-		}
 
-		private Date getDateValue(Cell cell) {
-			return cell != null ?  cell.getDateCellValue() : null;
+		} else if ("External".equals(dataSheet.getApiType())) {
+			tempRiskScore = 0;
+			if ("Low".equalsIgnoreCase(dataSheet.getApiRiskClassificatin())) {
+				if ("Pending".equalsIgnoreCase(dataSheet.getPenTestStatus())) {
+					tempRiskScore = tempRiskScore + 2;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getRamlReviewStatus())) {
+					tempRiskScore = tempRiskScore + 4;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getVeracodeStatus())) {
+					tempRiskScore = tempRiskScore + 2;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getPenTestSlaBreach())) {
+					tempRiskScore = tempRiskScore + 1;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getVeracodeSlaBreach())) {
+					tempRiskScore = tempRiskScore + 1;
+				}
+			} else if ("Medium".equalsIgnoreCase(dataSheet.getApiRiskClassificatin())) {
+				if ("Pending".equalsIgnoreCase(dataSheet.getPenTestStatus())) {
+					tempRiskScore = tempRiskScore + 4;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getRamlReviewStatus())) {
+					tempRiskScore = tempRiskScore + 0;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getVeracodeStatus())) {
+					tempRiskScore = tempRiskScore + 4;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getPenTestSlaBreach())) {
+					tempRiskScore = tempRiskScore + 2;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getVeracodeSlaBreach())) {
+					tempRiskScore = tempRiskScore + 2;
+				}
+			} else if ("High".equalsIgnoreCase(dataSheet.getApiRiskClassificatin())) {
+				if ("Pending".equalsIgnoreCase(dataSheet.getPenTestStatus())) {
+					tempRiskScore = tempRiskScore + 12;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getRamlReviewStatus())) {
+					tempRiskScore = tempRiskScore + 4;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getVeracodeStatus())) {
+					tempRiskScore = tempRiskScore + 12;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getPenTestSlaBreach())) {
+					tempRiskScore = tempRiskScore + 6;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getVeracodeSlaBreach())) {
+					tempRiskScore = tempRiskScore + 6;
+				}
+			} else if ("Critical".equalsIgnoreCase(dataSheet.getApiRiskClassificatin())) {
+				if ("Pending".equalsIgnoreCase(dataSheet.getPenTestStatus())) {
+					tempRiskScore = tempRiskScore + 16;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getRamlReviewStatus())) {
+					tempRiskScore = tempRiskScore + 8;
+				}
+				if ("Pending".equalsIgnoreCase(dataSheet.getVeracodeStatus())) {
+					tempRiskScore = tempRiskScore + 16;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getPenTestSlaBreach())) {
+					tempRiskScore = tempRiskScore + 10;
+				}
+				if ("SLA Breached".equalsIgnoreCase(dataSheet.getVeracodeSlaBreach())) {
+					tempRiskScore = tempRiskScore + 10;
+				}
+			}
 		}
-
-		private Integer getIntegerValue(Cell cell) {
-			return (cell != null && cell.getCellType() == CellType.NUMERIC) ?  (int)cell.getNumericCellValue() : null;
-		}
-
-		private Boolean getBooleanValue(Cell cell) {
-			return (cell != null && cell.getCellType() == CellType.BOOLEAN) ?  cell.getBooleanCellValue() : Boolean.FALSE;
-		}
-		
-		private int getRiskScore(DataSheet dataSheet) {
-			int riskRiskScore = 0;
-			
-			return riskRiskScore;
-		}
-		
+		riskScore = tempRiskScore;
+		return riskScore;
+	}
 }
-/*Cell cell = row.getCell(6);
-System.out.println("Cell================="+cell);
-if (cell == null) {
-      // This cell is empty/blank/un-used, handle as needed
-	dataSheet.setRamlReviewDate(null);
-    } else {
-    	dataSheet.setRamlReviewDate(row.getCell(6).getDateCellValue());
-//          String cellStr = fmt.formatCell(cell);
-       // Do something with the value
-    }*/
+/*
+ * Cell cell = row.getCell(6); System.out.println("Cell================="+cell);
+ * if (cell == null) { // This cell is empty/blank/un-used, handle as needed
+ * dataSheet.setRamlReviewDate(null); } else {
+ * dataSheet.setRamlReviewDate(row.getCell(6).getDateCellValue()); // String
+ * cellStr = fmt.formatCell(cell); // Do something with the value }
+ */
