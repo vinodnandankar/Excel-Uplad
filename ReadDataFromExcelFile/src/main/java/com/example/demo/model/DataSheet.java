@@ -31,7 +31,6 @@ public class DataSheet implements Serializable{
 	private Date penTestDate;
 	private String veracodeSlaBreach;
 	private String penTestSlaBreach;
-	private String ramlReviewPending;
 	private int riskScore;
 	private String overallRiskClassification;
 
@@ -41,7 +40,7 @@ public class DataSheet implements Serializable{
 	public DataSheet(int srNo, String apiVersion, String apiName, String apiType, String apiRiskClassificatin,
 			String ramlReviewStatus, Date ramlReviewDate, String veracodeStatus, Date veracodeDate,
 			String penTestStatus, Date penTestDate, String veracodeSlaBreach, String penTestSlaBreach,
-			String ramlReviewPending, int riskScore, String overallRiskClassification) {
+			int riskScore, String overallRiskClassification) {
 		super();
 		this.srNo = srNo;
 		this.apiVersion = apiVersion;
@@ -56,7 +55,7 @@ public class DataSheet implements Serializable{
 		this.penTestDate = penTestDate;
 		this.veracodeSlaBreach = veracodeSlaBreach;
 		this.penTestSlaBreach = penTestSlaBreach;
-		this.ramlReviewPending = ramlReviewPending;
+//		this.ramlReviewPending = ramlReviewPending;
 		this.riskScore = riskScore;
 		this.overallRiskClassification =  overallRiskClassification;
 	}
@@ -68,7 +67,7 @@ public class DataSheet implements Serializable{
 				+ ", ramlReviewDate=" + ramlReviewDate + ", veracodeStatus=" + veracodeStatus + ", veracodeDate="
 				+ veracodeDate + ", penTestStatus=" + penTestStatus + ", penTestDate=" + penTestDate
 				+ ", veracodeSlaBreach=" + veracodeSlaBreach + ", penTestSlaBreach=" + penTestSlaBreach
-				+ ", ramlReviewPending=" + ramlReviewPending + ", riskScore=" + riskScore + ", overallRiskClassification=" + overallRiskClassification + " ]";
+				+ ", riskScore=" + riskScore + ", overallRiskClassification=" + overallRiskClassification + " ]";
 	}
 
 	public int getSrNo() {
@@ -173,14 +172,6 @@ public class DataSheet implements Serializable{
 
 	public void setPenTestSlaBreach(String penTestSlaBreach) {
 		this.penTestSlaBreach = penTestSlaBreach;
-	}
-
-	public String getRamlReviewPending() {
-		return ramlReviewPending;
-	}
-
-	public void setRamlReviewPending(String ramlReviewPending) {
-		this.ramlReviewPending = ramlReviewPending;
 	}
 
 	public int getRiskScore() {

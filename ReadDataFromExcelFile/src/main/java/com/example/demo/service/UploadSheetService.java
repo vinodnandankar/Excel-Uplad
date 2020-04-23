@@ -24,10 +24,9 @@ import com.example.demo.util.ConstantsVars;
 
 @Service
 public class UploadSheetService {
-	List<DataSheet> dataSheetList = new ArrayList<DataSheet>();
 
 	public List<DataSheet> upload(MultipartFile file) throws Exception {
-
+		List<DataSheet> dataSheetList = new ArrayList<DataSheet>();
 		Workbook workbook = getWorkBook(file);
 		Sheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rows = sheet.iterator();
@@ -49,8 +48,6 @@ public class UploadSheetService {
 			dataSheet.setPenTestDate(getDateValue(row.getCell(10)));
 			dataSheet.setVeracodeSlaBreach(getStringValue(row.getCell(11)));
 			dataSheet.setPenTestSlaBreach(getStringValue(row.getCell(12)));
-			dataSheet.setRamlReviewPending(getStringValue(row.getCell(13)));
-			// dataSheet.setRiskScore(getIntegerValue(row.getCell(14)));
 			dataSheet.setRiskScore(getRiskScore(dataSheet));
 			dataSheet.setOverallRiskClassification(getOverallRiskClassification(dataSheet.getRiskScore()));
 
@@ -275,10 +272,3 @@ public class UploadSheetService {
 	}
 
 }
-/*
- * Cell cell = row.getCell(6); System.out.println("Cell================="+cell);
- * if (cell == null) { // This cell is empty/blank/un-used, handle as needed
- * dataSheet.setRamlReviewDate(null); } else {
- * dataSheet.setRamlReviewDate(row.getCell(6).getDateCellValue()); // String
- * cellStr = fmt.formatCell(cell); // Do something with the value }
- */
