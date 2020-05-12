@@ -19,9 +19,15 @@ public class UploadController {
 	}
 
 	
-	@PostMapping("/upload")
+	/*@PostMapping("/upload")
 	public List<DataSheet> upload(@RequestParam("file")MultipartFile file) throws Exception {
 		return uploadSheetService.upload(file);
+
+	}*/
+	
+	@PostMapping("/upload")
+	public List<DataSheet> upload() throws Exception {
+		return uploadSheetService.upload();
 
 	}
 }

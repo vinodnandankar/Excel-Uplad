@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -25,9 +26,13 @@ import com.example.demo.util.ConstantsVars;
 @Service
 public class UploadSheetService {
 
-	public List<DataSheet> upload(MultipartFile file) throws Exception {
+//	public List<DataSheet> upload(MultipartFile file) throws Exception {
+	public List<DataSheet> upload() throws Exception {
+
 		List<DataSheet> dataSheetList = new ArrayList<DataSheet>();
-		Workbook workbook = getWorkBook(file);
+//		Workbook workbook = getWorkBook(file);
+		Workbook workbook = new XSSFWorkbook(new File("D:/SystemApi/BackUpReadDataFromExcel/DataSheet.xlsx"));
+
 		Sheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rows = sheet.iterator();
 		rows.next();
