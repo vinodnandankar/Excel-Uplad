@@ -33,14 +33,15 @@ public class DataSheet implements Serializable{
 	private String penTestSlaBreach;
 	private int riskScore;
 	private String overallRiskClassification;
-
+	private String transactionCycle;
+	
 	public DataSheet() {
 	}
 
 	public DataSheet(int srNo, String apiVersion, String apiName, String apiType, String apiRiskClassificatin,
 			String ramlReviewStatus, Date ramlReviewDate, String veracodeStatus, Date veracodeDate,
 			String penTestStatus, Date penTestDate, String veracodeSlaBreach, String penTestSlaBreach,
-			int riskScore, String overallRiskClassification) {
+			int riskScore, String overallRiskClassification,String transactionCycle) {
 		super();
 		this.srNo = srNo;
 		this.apiVersion = apiVersion;
@@ -55,9 +56,9 @@ public class DataSheet implements Serializable{
 		this.penTestDate = penTestDate;
 		this.veracodeSlaBreach = veracodeSlaBreach;
 		this.penTestSlaBreach = penTestSlaBreach;
-//		this.ramlReviewPending = ramlReviewPending;
 		this.riskScore = riskScore;
 		this.overallRiskClassification =  overallRiskClassification;
+		this.transactionCycle =  transactionCycle;
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class DataSheet implements Serializable{
 				+ ", ramlReviewDate=" + ramlReviewDate + ", veracodeStatus=" + veracodeStatus + ", veracodeDate="
 				+ veracodeDate + ", penTestStatus=" + penTestStatus + ", penTestDate=" + penTestDate
 				+ ", veracodeSlaBreach=" + veracodeSlaBreach + ", penTestSlaBreach=" + penTestSlaBreach
-				+ ", riskScore=" + riskScore + ", overallRiskClassification=" + overallRiskClassification + " ]";
+				+ ", riskScore=" + riskScore + ", overallRiskClassification=" + overallRiskClassification + ",transactionCycle=\" + transactionCycle + \" ]";
 	}
 
 	public int getSrNo() {
@@ -188,6 +189,14 @@ public class DataSheet implements Serializable{
 
 	public void setOverallRiskClassification(String overallRiskClassification) {
 		this.overallRiskClassification = overallRiskClassification;
+	}
+
+	public String getTransactionCycle() {
+		return transactionCycle;
+	}
+
+	public void setTransactionCycle(String transactionCycle) {
+		this.transactionCycle = transactionCycle;
 	}
 
 	

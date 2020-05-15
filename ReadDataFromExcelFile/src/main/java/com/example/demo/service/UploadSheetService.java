@@ -55,6 +55,7 @@ public class UploadSheetService {
 			dataSheet.setPenTestSlaBreach(getStringValue(row.getCell(12)));
 			dataSheet.setRiskScore(getRiskScore(dataSheet));
 			dataSheet.setOverallRiskClassification(getOverallRiskClassification(dataSheet.getRiskScore()));
+			dataSheet.setTransactionCycle(getStringValue(row.getCell(15)));
 
 			dataSheetList.add(dataSheet);
 		}
