@@ -266,13 +266,13 @@ public class UploadSheetService {
 		if (IntStream.rangeClosed(0, 0).boxed().collect(Collectors.toList()).contains(riskScore))
 			overallRisk = "Met";
 		if (IntStream.rangeClosed(1, 6).boxed().collect(Collectors.toList()).contains(riskScore))
-			overallRisk = "Low Risk";
+			overallRisk = "Low";
 		if (IntStream.rangeClosed(7, 13).boxed().collect(Collectors.toList()).contains(riskScore))
-			overallRisk = "Medium Risk";
+			overallRisk = "Medium";
 		if (IntStream.rangeClosed(14, 24).boxed().collect(Collectors.toList()).contains(riskScore))
-			overallRisk = "High Risk";
+			overallRisk = "High";
 		if (IntStream.rangeClosed(25, 34).boxed().collect(Collectors.toList()).contains(riskScore))
-			overallRisk = "Critical Risk";
+			overallRisk = "Critical";
 
 		return overallRisk;
 	}
