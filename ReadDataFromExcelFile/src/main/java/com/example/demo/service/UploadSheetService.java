@@ -264,7 +264,7 @@ public class UploadSheetService {
 		String overallRisk = null;
 
 		if (IntStream.rangeClosed(0, 0).boxed().collect(Collectors.toList()).contains(riskScore))
-			overallRisk = "No Risk";
+			overallRisk = "Met";
 		if (IntStream.rangeClosed(1, 6).boxed().collect(Collectors.toList()).contains(riskScore))
 			overallRisk = "Low Risk";
 		if (IntStream.rangeClosed(7, 13).boxed().collect(Collectors.toList()).contains(riskScore))
