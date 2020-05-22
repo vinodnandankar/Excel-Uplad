@@ -56,6 +56,7 @@ public class UploadSheetService {
 			dataSheet.setRiskScore(getRiskScore(dataSheet));
 			dataSheet.setOverallRiskClassification(getOverallRiskClassification(dataSheet.getRiskScore()));
 			dataSheet.setTransactionCycle(getStringValue(row.getCell(15)));
+			dataSheet.setBusinessUnit(getStringValue(row.getCell(16)));
 
 			dataSheetList.add(dataSheet);
 		}

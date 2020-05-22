@@ -34,6 +34,7 @@ public class DataSheet implements Serializable{
 	private int riskScore;
 	private String overallRiskClassification;
 	private String transactionCycle;
+	private String businessUnit;
 	
 	public DataSheet() {
 	}
@@ -41,7 +42,7 @@ public class DataSheet implements Serializable{
 	public DataSheet(int srNo, String apiVersion, String apiName, String apiType, String apiRiskClassificatin,
 			String ramlReviewStatus, Date ramlReviewDate, String veracodeStatus, Date veracodeDate,
 			String penTestStatus, Date penTestDate, String veracodeSlaBreach, String penTestSlaBreach,
-			int riskScore, String overallRiskClassification,String transactionCycle) {
+			int riskScore, String overallRiskClassification,String transactionCycle,String businessUnit ) {
 		super();
 		this.srNo = srNo;
 		this.apiVersion = apiVersion;
@@ -59,6 +60,7 @@ public class DataSheet implements Serializable{
 		this.riskScore = riskScore;
 		this.overallRiskClassification =  overallRiskClassification;
 		this.transactionCycle =  transactionCycle;
+		this.businessUnit =  businessUnit;
 	}
 
 	@Override
@@ -68,7 +70,7 @@ public class DataSheet implements Serializable{
 				+ ", ramlReviewDate=" + ramlReviewDate + ", veracodeStatus=" + veracodeStatus + ", veracodeDate="
 				+ veracodeDate + ", penTestStatus=" + penTestStatus + ", penTestDate=" + penTestDate
 				+ ", veracodeSlaBreach=" + veracodeSlaBreach + ", penTestSlaBreach=" + penTestSlaBreach
-				+ ", riskScore=" + riskScore + ", overallRiskClassification=" + overallRiskClassification + ",transactionCycle=\" + transactionCycle + \" ]";
+				+ ", riskScore=" + riskScore + ", overallRiskClassification=" + overallRiskClassification + ",transactionCycle=" + transactionCycle +", businessUnit=" + businessUnit + "]";
 	}
 
 	public int getSrNo() {
@@ -197,6 +199,14 @@ public class DataSheet implements Serializable{
 
 	public void setTransactionCycle(String transactionCycle) {
 		this.transactionCycle = transactionCycle;
+	}
+
+	public String getBusinessUnit() {
+		return businessUnit;
+	}
+
+	public void setBusinessUnit(String businessUnit) {
+		this.businessUnit = businessUnit;
 	}
 
 	
